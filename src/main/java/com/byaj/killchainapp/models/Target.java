@@ -2,9 +2,13 @@ package com.byaj.killchainapp.models;
 
 import org.aspectj.weaver.bcel.AtAjAttributes;
 
+import javax.persistence.*;
 import java.util.*;
 
+@Entity
 public class Target {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
     private TargetClass typetarget;
@@ -13,11 +17,11 @@ public class Target {
     private Boolean isOnNetwork;
     private Long networkId;
     private String networkIp;
-    private List<MitigationEnum> mitlist = new ArrayList<>();
+    private String mitlist;
     public Target() {
     }
 
-    public Target(String name, TargetClass typetarget, Boolean isActive, String ipAddress, Boolean isOnNetwork, Long networkId, String networkIp, List<MitigationEnum> mitlist) {
+    public Target(String name, TargetClass typetarget, Boolean isActive, String ipAddress, Boolean isOnNetwork, Long networkId, String networkIp, String mitlist) {
         this.name = name;
         this.typetarget = typetarget;
         this.isActive = isActive;
@@ -65,12 +69,6 @@ public class Target {
         isOnNetwork = onNetwork;
     }
 
-    public List<MitigationEnum> getMitlist() {
-        return mitlist;
-    }
-    public void setMitlist(List<MitigationEnum> mitlist) {
-        this.mitlist = mitlist;
-    }
 
     public boolean processAttack(Attacks attack){
         Boolean doesSucceed = true;
@@ -78,64 +76,64 @@ public class Target {
 
         // No full block to SQL Injection, so process partial blocks
         if (attack.equals(Attacks.SQLInjection)){
-            if (mitlist.contains(MitigationEnum.WhiteListInputs)){
+            if (mitlist.contains(MitigationEnum.WhiteListInputs.toString())){
                 blockcount += 1;
             }
-            if (mitlist.contains(MitigationEnum.LeastPrivileges)){
+            if (mitlist.contains(MitigationEnum.LeastPrivileges.toString())){
                 blockcount += 1;
             }
-            if (mitlist.contains(MitigationEnum.EscapingUserInput)){
+            if (mitlist.contains(MitigationEnum.EscapingUserInput.toString())){
                 blockcount += 1;
             }
-            if (mitlist.contains(MitigationEnum.PreparedStatements)){
+            if (mitlist.contains(MitigationEnum.PreparedStatements.toString())){
                 blockcount += 1;
             }
-            if (mitlist.contains(MitigationEnum.StoredProcedures)){
+            if (mitlist.contains(MitigationEnum.StoredProcedures.toString())){
                 blockcount += 1;
             }
             // No full block to LDAP Injection, so process partial blocks
         } else if (attack.equals(Attacks.LDAPInjection)){
-            if (mitlist.contains(MitigationEnum.WhiteListInputs)){
+            if (mitlist.contains(MitigationEnum.WhiteListInputs.toString())){
                 blockcount += 1;
             }
-            if (mitlist.contains(MitigationEnum.LeastPrivileges)){
+            if (mitlist.contains(MitigationEnum.LeastPrivileges.toString())){
                 blockcount += 1;
             }
-            if (mitlist.contains(MitigationEnum.EscapingUserInput)){
+            if (mitlist.contains(MitigationEnum.EscapingUserInput.toString())){
                 blockcount += 1;
             }
             // No full block to IMAP/SMTP Injection, so process partial blocks
         } else if (attack.equals(Attacks.IMAP_SMTPInjection)){
-            if (mitlist.contains(MitigationEnum.WhiteListInputs)){
+            if (mitlist.contains(MitigationEnum.WhiteListInputs.toString())){
                 blockcount += 1;
             }
-            if (mitlist.contains(MitigationEnum.LeastPrivileges)){
+            if (mitlist.contains(MitigationEnum.LeastPrivileges.toString())){
                 blockcount += 1;
             }
-            if (mitlist.contains(MitigationEnum.EscapingUserInput)){
+            if (mitlist.contains(MitigationEnum.EscapingUserInput.toString())){
                 blockcount += 1;
             }
             // First handle full blocks
         } else if (attack.equals(Attacks.XSS)){
-            if (mitlist.contains(MitigationEnum.XSS_Prevention)){
+            if (mitlist.contains(MitigationEnum.XSS_Prevention.toString())){
                 doesSucceed = false;
             }
             // Now process partial blocks
-            if (mitlist.contains(MitigationEnum.WhiteListInputs)){
+            if (mitlist.contains(MitigationEnum.WhiteListInputs.toString())){
                 blockcount += 1;
             }
-            if (mitlist.contains(MitigationEnum.EscapingUserInput)){
+            if (mitlist.contains(MitigationEnum.EscapingUserInput.toString())){
                 blockcount += 1;
             }
         } else if (attack.equals(Attacks.XSS)){
-            if (mitlist.contains(MitigationEnum.XSS_Prevention)){
+            if (mitlist.contains(MitigationEnum.XSS_Prevention.toString())){
                 doesSucceed = false;
             }
             // Now process partial blocks
-            if (mitlist.contains(MitigationEnum.WhiteListInputs)){
+            if (mitlist.contains(MitigationEnum.WhiteListInputs.toString())){
                 blockcount += 1;
             }
-            if (mitlist.contains(MitigationEnum.EscapingUserInput)){
+            if (mitlist.contains(MitigationEnum.EscapingUserInput.toString())){
                 blockcount += 1;
             }
         }
@@ -156,89 +154,89 @@ public class Target {
     {
         // Create a list of possible mitigations that block the attack
         // and haven't already been done
-        List<MitigationEnum> possmits = new ArrayList<>();
+        List<String> possmits = new ArrayList<>();
         if (attack == Attacks.SQLInjection)
         {
             if (typetarget.equals(TargetClass.DBServer)) {
-                if (!mitlist.contains(MitigationEnum.LeastPrivileges)) {
-                    possmits.add(MitigationEnum.LeastPrivileges);
+                if (!mitlist.contains(MitigationEnum.LeastPrivileges.toString())) {
+                    possmits.add(MitigationEnum.LeastPrivileges.toString());
                 }
-                if (!mitlist.contains(MitigationEnum.PreparedStatements)) {
-                    possmits.add(MitigationEnum.PreparedStatements);
+                if (!mitlist.contains(MitigationEnum.PreparedStatements.toString())) {
+                    possmits.add(MitigationEnum.PreparedStatements.toString());
                 }
-                if (!mitlist.contains(MitigationEnum.StoredProcedures)) {
-                    possmits.add(MitigationEnum.StoredProcedures);
+                if (!mitlist.contains(MitigationEnum.StoredProcedures.toString())) {
+                    possmits.add(MitigationEnum.StoredProcedures.toString());
                 }
             } else if (typetarget.equals(TargetClass.WebServer)){
-                if (!mitlist.contains(MitigationEnum.WhiteListInputs ))
+                if (!mitlist.contains(MitigationEnum.WhiteListInputs.toString() ))
                 {
-                    possmits.add(MitigationEnum.WhiteListInputs);
+                    possmits.add(MitigationEnum.WhiteListInputs.toString());
                 }
-                if (!mitlist.contains(MitigationEnum.EscapingUserInput))
+                if (!mitlist.contains(MitigationEnum.EscapingUserInput.toString()))
                 {
-                    possmits.add(MitigationEnum.EscapingUserInput);
+                    possmits.add(MitigationEnum.EscapingUserInput.toString());
                 }
             }
         } else if (attack.equals(Attacks.LDAPInjection)){
             if (typetarget.equals(TargetClass.DirectoryServer)) {
-                if (!mitlist.contains(MitigationEnum.LeastPrivileges)) {
-                    possmits.add(MitigationEnum.LeastPrivileges);
+                if (!mitlist.contains(MitigationEnum.LeastPrivileges.toString())) {
+                    possmits.add(MitigationEnum.LeastPrivileges.toString());
                 }
             } else if (typetarget.equals(TargetClass.WebServer)){
-                if (!mitlist.contains(MitigationEnum.WhiteListInputs ))
+                if (!mitlist.contains(MitigationEnum.WhiteListInputs.toString() ))
                 {
-                    possmits.add(MitigationEnum.WhiteListInputs);
+                    possmits.add(MitigationEnum.WhiteListInputs.toString());
                 }
-                if (!mitlist.contains(MitigationEnum.EscapingUserInput))
+                if (!mitlist.contains(MitigationEnum.EscapingUserInput.toString()))
                 {
-                    possmits.add(MitigationEnum.EscapingUserInput);
+                    possmits.add(MitigationEnum.EscapingUserInput.toString());
                 }
             }
         } else if (attack.equals(Attacks.IMAP_SMTPInjection)){
             if (typetarget.equals(TargetClass.EmailServer)) {
-                if (!mitlist.contains(MitigationEnum.LeastPrivileges)) {
-                    possmits.add(MitigationEnum.LeastPrivileges);
+                if (!mitlist.contains(MitigationEnum.LeastPrivileges.toString())) {
+                    possmits.add(MitigationEnum.LeastPrivileges.toString());
                 }
             } else if (typetarget.equals(TargetClass.WebServer)){
-                if (!mitlist.contains(MitigationEnum.EscapingUserInput))
+                if (!mitlist.contains(MitigationEnum.EscapingUserInput.toString()))
                 {
-                    possmits.add(MitigationEnum.EscapingUserInput);
+                    possmits.add(MitigationEnum.EscapingUserInput.toString());
                 }
-                if (!mitlist.contains(MitigationEnum.WhiteListInputs ))
+                if (!mitlist.contains(MitigationEnum.WhiteListInputs.toString() ))
                 {
-                    possmits.add(MitigationEnum.WhiteListInputs);
+                    possmits.add(MitigationEnum.WhiteListInputs.toString());
                 }
             }
         } else if (attack.equals(Attacks.XSS)){
-                if (!mitlist.contains(MitigationEnum.WhiteListInputs ))
+                if (!mitlist.contains(MitigationEnum.WhiteListInputs.toString() ))
                 {
-                    possmits.add(MitigationEnum.WhiteListInputs);
+                    possmits.add(MitigationEnum.WhiteListInputs.toString());
                 }
-                if (!mitlist.contains(MitigationEnum.EscapingUserInput))
+                if (!mitlist.contains(MitigationEnum.EscapingUserInput.toString()))
                 {
-                    possmits.add(MitigationEnum.EscapingUserInput);
+                    possmits.add(MitigationEnum.EscapingUserInput.toString());
                 }
-                if (!mitlist.contains(MitigationEnum.XSS_Prevention))
+                if (!mitlist.contains(MitigationEnum.XSS_Prevention.toString()))
                 {
-                    possmits.add(MitigationEnum.XSS_Prevention);
+                    possmits.add(MitigationEnum.XSS_Prevention.toString());
                 }
         } else if (attack.equals(Attacks.RogueMachine)){
-            if (!mitlist.contains(MitigationEnum.PhysicalTraining ))
+            if (!mitlist.contains(MitigationEnum.PhysicalTraining.toString() ))
             {
-                possmits.add(MitigationEnum.PhysicalTraining);
+                possmits.add(MitigationEnum.PhysicalTraining.toString());
             }
-            if (!mitlist.contains(MitigationEnum.PersonalTraining))
+            if (!mitlist.contains(MitigationEnum.PersonalTraining.toString()))
             {
-                possmits.add(MitigationEnum.PersonalTraining);
+                possmits.add(MitigationEnum.PersonalTraining.toString());
             }
-            if (!mitlist.contains(MitigationEnum.EmailTraining))
+            if (!mitlist.contains(MitigationEnum.EmailTraining.toString()))
             {
-                possmits.add(MitigationEnum.EmailTraining);
+                possmits.add(MitigationEnum.EmailTraining.toString());
             }
         } else if (attack.equals(Attacks.CommandLine)){
-            if (!mitlist.contains(MitigationEnum.Patches_Updates))
+            if (!mitlist.contains(MitigationEnum.Patches_Updates.toString()))
             {
-                possmits.add(MitigationEnum.Patches_Updates);
+                possmits.add(MitigationEnum.Patches_Updates.toString());
             }
         }
 
@@ -251,7 +249,7 @@ public class Target {
 
         // if random unused attack exists add it to the mitigation list and return true
         if (lsize > 0){
-            mitlist.add(possmits.get(Result - 1));
+            mitlist += possmits.get(Result - 1);
             return true;
         } else {
             return false;
@@ -286,5 +284,14 @@ public class Target {
 
     public void setNetworkIp(String networkIp) {
         this.networkIp = networkIp;
+    }
+
+
+    public String getMitlist() {
+        return mitlist;
+    }
+
+    public void setMitlist(String mitlist) {
+        this.mitlist = mitlist;
     }
 }

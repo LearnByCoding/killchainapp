@@ -1,5 +1,6 @@
 package com.byaj.killchainapp;
 
+import com.byaj.killchainapp.models.Player;
 import com.byaj.killchainapp.repositories.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -7,7 +8,7 @@ import java.util.Date;
 
 public class Command {
     @Autowired
-    PlayerRepository playerRepository;
+    static PlayerRepository playerRepository;
 
     private static String acceptedOutsideCommands = "Commands recognized by killchain include: [[b;white;]rules], [[b;white;]man], [[b;white;]help], ping, scan, networkmap, patch, install, train, inject, do \n" +
             "To get more information about a command, type man <<command>> \n" +
@@ -48,9 +49,13 @@ public class Command {
             return rules();
         } else {
             if (where.equals("outside")) {
-                return "Please enter a recognized command. If you need help, use the [[b;white;]man <<command>>]. \n" +
-                        "For example, you could type [[b;white;]man rules].\n" +
-                        "If you need a list of all commands. Type [[b;white;]help].";
+                if (command.length() > 5 && command.substring(0,6).equals("status")) {
+                    return "You are not currently in-game...";
+                } else {
+                    return "Please enter a recognized command. If you need help, use the [[b;white;]man <<command>>]. \n" +
+                            "For example, you could type [[b;white;]man rules].\n" +
+                            "If you need a list of all commands. Type [[b;white;]help].";
+                }
             } else {
                 return "|||";
             }
@@ -70,7 +75,7 @@ public class Command {
             return manPage(infoRequest);
         } else if (command.length() > 4 && command.substring(0,5).equals("rules")){
             return rules();
-        } else if (command.length() > 4 && command.substring(0,5).equals("status")){
+        } else if (command.length() > 5 && command.substring(0,6).equals("status")){
             return status(userid);
         } else {
             return "Please enter a recognized command. If you need help, use the [[b;white;]man <<command>>]. \n" +
@@ -101,14 +106,18 @@ public class Command {
     }
 
     private static String status(Long userid){
+        Player player = new Player();
+        player = playerRepository.findOne(userid);
+        String response = "";
         // name
+        response += "Name: " + player.getName();
         // machine name
         // ip address
         // score
         // vms
         // protections
 
-        return "";
+        return response;
     }
 }
 

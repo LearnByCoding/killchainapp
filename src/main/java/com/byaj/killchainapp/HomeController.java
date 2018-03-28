@@ -17,7 +17,7 @@ public class HomeController {
         return "home";
     }
 
-    @RequestMapping("/}")
+    @RequestMapping("/")
     public String basic(Model model, HttpServletRequest request){
         Cookie[] cookies = request.getCookies();
         Boolean hasCookie = false;
@@ -50,6 +50,23 @@ public class HomeController {
         return "index2";
     }
 
+    @RequestMapping("/process")
+    public String process(@RequestParam String gameid, Model model, HttpServletRequest request, HttpServletResponse response){
+        Cookie[] cookies = request.getCookies();
+        Boolean hasCookie = false;
+        for (Cookie cookie : cookies){
+            if (cookie.getName().equals("killchain")){
+                hasCookie = true;
+            }
+        }
+
+        Cookie cookie = new Cookie("killchain", gameid);
+        cookie.setMaxAge(60 * 60);
+        response.addCookie(cookie);
+
+        return "redirect:/";
+    }
+
     @PostMapping ("/outside")
     public @ResponseBody String processOutsideCommands(@RequestParam String command){
         command = Command.processOutside(command);
@@ -58,7 +75,7 @@ public class HomeController {
 
     @PostMapping ("/inside")
     public @ResponseBody String processInsideCommands(@RequestParam String command){
-        Long userid = 1L;
+        Long userid = 7L;
         command = Command.processInside(command,  userid);
         return command;
     }

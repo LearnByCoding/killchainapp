@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class HomeRestController {
 
-    @RequestMapping("/process")
+    @RequestMapping("/process2")
     public String dude(){
         Gamedata gd = new Gamedata("zyxc",false,false,"dude");
         return gd.toString();
