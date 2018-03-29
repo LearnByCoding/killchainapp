@@ -20,6 +20,7 @@ public class Player {
     private String targets;
     private String bitcoin;
     private String passwords;
+    private String mitlist;
 
 
     private Long ttl;
@@ -35,6 +36,21 @@ public class Player {
         this.machinename = machinename;
         this.isActive = isActive;
         this.isDead = isDead;
+        this.ttl = ttl;
+    }
+
+    public Player(String name, String password, String ipaddress, String machinename, Boolean isActive, Boolean isDead, String commands, String targets, String bitcoin, String passwords, String mitlist, Long ttl) {
+        this.name = name;
+        this.password = password;
+        this.ipaddress = ipaddress;
+        this.machinename = machinename;
+        this.isActive = isActive;
+        this.isDead = isDead;
+        this.commands = commands;
+        this.targets = targets;
+        this.bitcoin = bitcoin;
+        this.passwords = passwords;
+        this.mitlist = mitlist;
         this.ttl = ttl;
     }
 
@@ -114,5 +130,45 @@ public class Player {
                 ", isDead=" + isDead +
                 ", ttl=" + ttl +
                 '}';
+    }
+
+    public String getCommands() {
+        return commands;
+    }
+
+    public void setCommands(String commands) {
+        this.commands = commands;
+    }
+
+    public String getTargets() {
+        return targets;
+    }
+
+    public void setTargets(String targets) {
+        this.targets = targets;
+    }
+
+    public String getBitcoin() {
+        return bitcoin;
+    }
+
+    public void setBitcoin(String bitcoin) {
+        this.bitcoin = bitcoin;
+    }
+
+    public String getPasswords() {
+        return passwords;
+    }
+
+    public void setPasswords(String passwords) {
+        this.passwords = passwords;
+    }
+
+    public String getMitlist() {
+        return mitlist;
+    }
+
+    public void setMitlist(String mitlist) {
+        this.mitlist = mitlist;
     }
 }

@@ -42,7 +42,19 @@ public class DataLoader  implements CommandLineRunner{
         target = new Target("File Server", TargetClass.FileServer, true, "9.9.9.6", true, 1L, "9.9.9.1", null);
         targetRepository.save(target);
 
-        Player player = new Player(1L,"ajius","lincoln1","1.2.3.4","maydeceiver",true,false,100L);
+        Player player = new Player(
+                "ajius",
+                "lincoln1",
+                "1.2.3.4",
+                "maydeceiver",
+                true,
+                false,
+                "",
+                "",
+                "100",
+                "",
+                "",
+                100L);
         playerRepository.save(player);
     }
 }

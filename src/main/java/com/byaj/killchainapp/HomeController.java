@@ -1,5 +1,7 @@
 package com.byaj.killchainapp;
 
+import com.byaj.killchainapp.services.CommandService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 
 @Controller
 public class HomeController {
+
+    @Autowired
+    CommandService commandService;
 
     @RequestMapping("/home")
     public String home(){
@@ -69,14 +74,14 @@ public class HomeController {
 
     @PostMapping ("/outside")
     public @ResponseBody String processOutsideCommands(@RequestParam String command){
-        command = Command.processOutside(command);
+        command = commandService.processOutside(command);
         return command;
     }
 
     @PostMapping ("/inside")
     public @ResponseBody String processInsideCommands(@RequestParam String command){
         Long userid = 7L;
-        command = Command.processInside(command,  userid);
+        command = commandService.processInside(command,  userid);
         return command;
     }
 }
