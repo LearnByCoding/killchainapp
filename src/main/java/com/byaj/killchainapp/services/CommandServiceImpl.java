@@ -95,6 +95,40 @@ public class CommandServiceImpl implements CommandService {
             return rules();
         } else if (command.length() > 5 && command.substring(0,6).equals("status")){
             return status(userid);
+        } else if (command.length() > 1 && command.substring(0,2).equals("ls")){
+            return ls(userid);
+        } else if (command.length() > 2 && command.substring(0,3).equals("dir")){
+            return ls(userid);
+        } else if (command.length() > 2 && command.substring(0,3).equals("cat")){
+            return cat(userid);
+        } else if (command.length() > 2 && command.substring(0,3).equals("del")){
+            return del(userid);
+        } else if (command.length() > 9 && command.substring(0,10).equals("chngpasswd")){
+            return chngpasswd(userid);
+        } else if (command.length() > 5 && command.substring(0,6).equals("chngid")){
+            return chngid(userid);
+        } else if (command.length() > 5 && command.substring(0,6).equals("elpriv")){
+            return elpriv(userid);
+        } else if (command.length() > 4 && command.substring(0,5).equals("steal")){
+            return steal(userid);
+        } else if (command.length() > 6 && command.substring(0,7).equals("encrypt")){
+            return encrypt(userid);
+        } else if (command.length() > 3 && command.substring(0,4).equals("exit")){
+            return exit(userid);
+        } else if (command.length() > 5 && command.substring(0,6).equals("inject")){
+            return inject(userid);
+        } else if (command.length() > 4 && command.substring(0,5).equals("doxss")){
+            return doxss(userid);
+        } else if (command.length() > 6 && command.substring(0,7).equals("buyzero")){
+            return buyzero(userid);
+        } else if (command.length() > 7 && command.substring(0,8).equals("dosocial")){
+            return dosocial(userid);
+        } else if (command.length() > 4 && command.substring(0,5).equals("buyvm")){
+            return buyzero(userid);
+        } else if (command.length() > 7 && command.substring(0,8).equals("firewall")){
+            return firewall(userid);
+        } else if (command.length() > 6 && command.substring(0,7).equals("install")){
+            return install(userid);
         } else {
             return "Please enter a recognized command. If you need help, use the [[b;white;]man <<command>>]. \n" +
                     "For example, you could type [[b;white;]man rules].\n"+
@@ -170,6 +204,88 @@ public class CommandServiceImpl implements CommandService {
     private String version(){
         return "Killchain [[b;white;]v" + messages.get("static.version") + "]";
     }
+
+    private String ls(Long userid){
+        // Shows a file listing
+        // Have a set list of files based on target type with a query from the target table rounding out the following:
+        // log, data, funds, keys, type
+        return "directory listing";
+    }
+    private String cat(Long userid){
+        // Shows file contents
+        // Some files will have set or random contents with a query from the target table rounding out the following:
+        // log, data, funds, keys, type
+        return "file contents";
+    }
+    private String del(Long userid){
+        // Delete data
+        // Some files will have set or random contents with a query from the target table rounding out the following:
+        // log, data, funds, keys, type
+        return "del contents";
+    }
+    private String chngpasswd(Long userid){
+        // change password for machine that is current - requires root
+        // might local password or network password
+        return "changed password";
+    }
+    private String chngid(Long userid){
+        // change password for machine that is current - requires root
+        // might local password or network password
+        return "changed identity";
+    }
+    private String elpriv(Long userid){
+        // elevate privileges to give temporary root to user
+        // could be until level changed or until time ? is up
+        return "privileges elevated";
+    }
+    private String steal(Long userid){
+        // steal data based on target type
+        //
+        return "data stolen";
+    }
+    private String encrypt(Long userid){
+        // encrypt data based on target type
+        //
+        return "data encrypted";
+    }
+    private String exit(Long userid){
+        // exit from current shell
+        // if user machine, exit from game
+        return "data encrypted";
+    }
+    private String inject(Long userid){
+        // perform injection attack
+        // only works on server
+        return "injected";
+    }
+    private String doxss(Long userid){
+        // perform xss attack
+        // only works on servers
+        return "doxss";
+    }
+    private String buyzero(Long userid){
+        // buy a zero day attack
+        //
+        return "zeroed";
+    }
+    private String dosocial(Long userid){
+        // buy social engineering attack
+        // only works on servers
+        return "socialized";
+    }
+
+    private String firewall(Long userid){
+        // install or upgrade the firewall
+        //
+        return "do things to the firewall";
+    }
+    private String install(Long userid){
+        // install patches / keylogger / rootkit
+        // works on computers
+        return "install things";
+    }
+
+
 }
 
 
